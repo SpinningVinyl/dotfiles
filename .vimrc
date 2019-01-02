@@ -1,4 +1,4 @@
-" Last update: 02.01.2019 11:17
+" Last update: 02.01.2019 12:03
 " ============ vim-plug settings ============
 " Specify a directory for plugins
 call plug#begin('~/.vim/plugged')
@@ -207,7 +207,7 @@ nnoremap <leader>y <C-R>
 nnoremap <leader>trs :call RemoveTrailingSpaces()<cr>
 " leader-f to toggle folding
 nnoremap <leader>f zi
-" leader i to toggle highlighting of Tabs and trailing spaces
+" leader-i to toggle highlighting of Tabs and trailing spaces
 nnoremap <leader>i :set list!<cr>
 
 " Ctrl+D to duplicate the current line
