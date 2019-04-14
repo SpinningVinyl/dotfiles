@@ -1,4 +1,4 @@
-" Last update: 02.01.2019 12:07
+" Last update: 14.04.2019 14:26
 " ============ vim-plug settings ============
 " Specify a directory for plugins
 call plug#begin('~/.vim/plugged')
@@ -12,8 +12,8 @@ Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries'}
 
 Plug 'jlanzarotta/bufexplorer'
 
-" On-demand loading
-Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+Plug 'scrooloose/nerdtree'
+Plug 'Xuyuanp/nerdtree-git-plugin'
 
 " Initialize plugin system
 call plug#end()
@@ -92,6 +92,22 @@ augroup css
 	autocmd BufReadPre,FileReadPre 		*.css set tabstop=4
 	autocmd BufReadPre,FileReadPre 		*.css set expandtab
 augroup END
+
+" ============ NerdTree settings ============
+" show current file in the file tree
+nnoremap <silent> <Leader>u :NERDTreeFind<CR> 
+" autoload by default
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+" close after opening a file
+let NERDTreeQuitOnOpen = 1
+" q closes Vim if NerdTree is the last remaining window
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+let g:NERDTreeMinimalUI = 1
+let g:NERDTreeDirArrows = 1
+let g:NERDTreeShowGitStatus = 1
+let g:NERDTreeUpdateOnWrite = 1
 
 " ============ Misc settings ============
 set nocompatible " turn off the vi compatibility mode
@@ -185,7 +201,7 @@ imap <F2> <Esc>:w<cr>i
 vmap <F2> <Esc>:w<cr>i
 
 " fix navigation for softwrapped text
-nnoremap <expr> k v:count ? 'j' : 'gj'
+nnoremap <expr> j v:count ? 'j' : 'gj'
 nnoremap <expr> k v:count ? 'k' : 'gk'
 
 " quickly toggle NERDTree
@@ -205,6 +221,8 @@ nnoremap <leader>z :u<cr>
 nnoremap <leader>y <C-R>
 " leader-trs to strip trailing spaces
 nnoremap <leader>trs :call RemoveTrailingSpaces()<cr>
+" leader-eu to set file encoding to UTF-8
+nnoremap <leader>eu :set fileencoding=utf-8<cr>
 " leader-f to toggle folding
 nnoremap <leader>f zi
 " leader-i to toggle highlighting of Tabs, trailing spaces and EOLs
