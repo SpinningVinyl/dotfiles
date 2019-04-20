@@ -1,4 +1,4 @@
-" Last update: 14.04.2019 14:26
+" Last update: 20.04.2019 17:07
 " ============ vim-plug settings ============
 " Specify a directory for plugins
 call plug#begin('~/.vim/plugged')
@@ -20,6 +20,13 @@ call plug#end()
 
 filetype plugin indent on
 
+if !exists("g:os")
+    if has("win64") || has("win32") || has("win16")
+        let g:os = "Windows"
+    else
+        let g:os = substitute(system('uname'), '\n', '', '')
+    endif
+endif
 
 set completeopt-=preview
 set completeopt+=menu,menuone,noinsert
@@ -40,7 +47,11 @@ augroup OmniCompletionSetup
 augroup END
 
 " provide Clang library path for clang_complete
-let g:clang_library_path='/Library/Developer/CommandLineTools/usr/lib/libclang.dylib'
+if g:os == "Darwin"
+    let g:clang_library_path='/Library/Developer/CommandLineTools/usr/lib/libclang.dylib'
+elseif g:os == "Linux"
+    let g:clang_library_path='/usr/lib/libclang.so'
+endif
 
 " enable MUcomplete on startup
 let g:mucomplete#enable_auto_at_startup = 1
