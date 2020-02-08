@@ -1,4 +1,4 @@
-" Last update: 20.04.2019 17:07
+" Last update: 15.11.2019 21:07
 " ============ vim-plug settings ============
 " Specify a directory for plugins
 call plug#begin('~/.vim/plugged')
@@ -65,6 +65,7 @@ let g:mucomplete#chains.vim = ['path', 'cmd', 'keyn']
 au BufRead,BufNewFile {*.md,*.mkd,*.markdown} 			set ft=markdown
 au BufRead,BufNewFile {COMMIT_EDITMSG} 				set ft=gitcommit
 au BufNewFile,BufReadPost *.go 					set ft=go
+au BufRead,BufNewFile {*.gplot,*.gp,*.gpi,*.gnuplot,*.plt}      set ft=gnuplot
 
 au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | execute "normal g'\"" | endif " restore position in file
 
