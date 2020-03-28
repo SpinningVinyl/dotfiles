@@ -1,4 +1,4 @@
-" Last update: 15.11.2019 21:07
+" Last update: 28.03.2020 20:05
 " ============ vim-plug settings ============
 " Specify a directory for plugins
 call plug#begin('~/.vim/plugged')
@@ -135,7 +135,7 @@ set scrolloff=5
 set mouse=a " enable mouse
 set keymodel=startsel,stopsel " GUI-like behaviour for text selection
 set clipboard=unnamed " use system clipboard
-colorscheme flattened_light " sane colours for Solarized-light
+" colorscheme flattened_dark " sane colours for Solarized-light
 set encoding=utf8
 set hidden " allow abandoning unsaved buffers
 " disable swapping (all of my computers have at least 8GB of RAM and can
