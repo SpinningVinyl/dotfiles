@@ -1,0 +1,142 @@
+" Last update: 21.10.2020 18:11
+
+call plug#begin("~/.vim/plugged")
+
+Plug 'amdt/vim-niji'
+Plug 'sjl/tslime2.vim'
+Plug 'tpope/timl'
+Plug 'kovisoft/paredit', { 'for': ['clojure', 'scheme'] }
+
+call plug#end()
+
+let g:scheme_split_size = -10
+autocmd filetype lisp,scheme,art setlocal equalprg=scmindent.rkt
+
+let g:niji_dark_colours = [
+    \ [ '81', '#5fd7ff'],
+    \ [ '99', '#875fff'],
+    \ [ '1',  '#dc322f'],
+    \ [ '76', '#5fd700'],
+    \ [ '3',  '#b58900'],
+    \ [ '2',  '#859900'],
+    \ [ '6',  '#2aa198'],
+    \ [ '4',  '#268bd2'],
+    \ ]
+
+" ============ misc settings ============
+
+set nocompatible " turn off vi compatibility mode
+set title " show buffer name in the terminal title bar
+set number " enable line numbers
+set relativenumber " show relative line numbers
+set numberwidth=6 " width of the gutter
+" number of lines before or after the current line when scrolling
+set scrolloff=5
+set encoding=utf8
+set noswapfile
+set visualbell " silence, bitch!
+
+" highlight tabs, trailing spaces etc.
+set listchars=tab:>-,trail:⋅,eol:∇
+
+" ============ keyboard settings ============
+
+" remap the leader key to something easier to reach than \
+let mapleader=","
+let maplocalleader=","
+set keymap=ru-jcukenwin " use Russian keyboard layout in the Insert mode
+set iminsert=0 " use EN by default in the Insert mode
+set imsearch=0 " ...and when searching
+
+" use Ctrl+F to switch keyboard layouts within Vim
+cmap <silent> <C-F> <C-^>
+" really...
+imap <silent> <C-F> <C-^><Space><Esc>:call CurrentKeymapHighlight()<cr>a<C-H>
+nmap <silent> <C-F> a<C-^><Esc>:call CurrentKeymapHighlight()<cr>
+vmap <silent> <C-F> <Esc>a<C-^><Esc>:call CurrentKeymapHighlight()<cr>gv
+" F2 to save
+nmap <F2> :w<cr>
+imap <F2> <Esc>:w<cr>i
+vmap <F2> <Esc>:w<cr>i
+
+" fix navigation for softwrapped text
+nnoremap <expr> j v:count ? 'j' : 'gj'
+nnoremap <expr> k v:count ? 'k' : 'gk'
+
+" quickly toggle NERDTree
+nnoremap <leader>nt :NERDTreeToggle<cr>
+" list buffers, quickly switch to a buffer by entering its number
+" or delete # and enter the file name
+nnoremap <leader>bb :buffers<cr>:edit<Space>#
+" call BufExplorer
+nnoremap <leader>be :BufExplorer<cr>
+" leader-n — next buffer
+nnoremap <leader>n :bn<cr>
+" leader-p — previous buffer
+nnoremap <leader>p :bp<cr>
+" leader-z as undo
+nnoremap <leader>z :u<cr>
+" leader-y as redo
+nnoremap <leader>y <C-R>
+" leader-trs to strip trailing spaces
+nnoremap <leader>trs :call RemoveTrailingSpaces()<cr>
+" leader-eu to set file encoding to UTF-8
+nnoremap <leader>eu :set fileencoding=utf-8<cr>
+" leader-f to toggle folding
+nnoremap <leader>f zi
+" leader-i to toggle highlighting of Tabs, trailing spaces and EOLs
+nnoremap <leader>i :set list!<cr>
+
+" Ctrl+D to duplicate the current line
+imap <C-d> <Esc>yypi
+nmap <C-d> yyp
+
+" ============ fold settings ============
+set foldenable
+set foldmethod=indent
+set foldcolumn=3
+set foldlevel=1
+set foldopen=all " open folds on enter
+set foldclose=all " close folds on leave
+
+" word wrap without line breaks ('soft-wrap')
+:set wrap
+:set linebreak
+" don't insert linebreaks in newly entered text
+:set textwidth=0
+:set wrapmargin=0
+
+
+" ============ .vimrc settings ============
+" autoreload .vimrc on saving
+autocmd! bufwritepost $MYVIMRC source $MYVIMRC
+" insert last modification date when saving .vimrc
+autocmd! bufwritepre $MYVIMRC call setline(1, '" Last update: '.strftime("%d.%m.%Y %H:%M"))
+
+" ============ status line settings ============
+" buffer number, file path, file format, encoding, ASCII code, HEX code,
+" position, file length (No. of lines)
+set statusline=%-10.3n\ %F%m%r%h%w\ [%{&fileformat},%{&fileencoding}\]\ [TYPE=%Y]\ [ASCII=\%03.3b][HEX=\%02.2B]\ %=[POS=%04l,%04v][%p%%]\ [LEN=%L]
+set laststatus=2 " statusline always visible
+
+" ============ custom functions ============
+
+" better indication of the current keyboard layout
+function! CurrentKeymapHighlight()
+    if &iminsert == 0 " if KB = EN the status bar is green
+	hi StatusLine ctermfg=DarkGreen guifg=DarkGreen
+    else " otherwise the status bar is red
+	hi StatusLine ctermfg=DarkRed guifg=DarkRed
+    endif
+endfunction
+call CurrentKeymapHighlight() " set statusline colour on launch
+autocmd WinEnter * :call CurrentKeymapHighlight() " refresh when changing windows
+
+" remove trailing spaces
+function! RemoveTrailingSpaces()
+   normal! mzHmy
+   execute '%s:\s\+$::ge'
+   normal! 'yzt`z
+endfunction
+
+
