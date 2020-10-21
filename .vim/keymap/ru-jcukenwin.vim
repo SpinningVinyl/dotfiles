@@ -1,8 +1,8 @@
-" Vim Keymap file for russian characters, Mac layout
+" Vim Keymap file for russian characters, Windows layout
 " encoding: UTF-8
 
 " Creator:  	Pavel Urusov <pavel.urusov@gmail.com>
-" Last Changed: 2018 Dec 30
+" Last Changed: 2020 Oct 21
 
 scriptencoding utf-8
 
