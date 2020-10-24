@@ -1,16 +1,26 @@
-" Last update: 21.10.2020 18:11
+" Last update: 24.10.2020 21:09
 
 call plug#begin("~/.vim/plugged")
 
 Plug 'amdt/vim-niji'
-Plug 'sjl/tslime2.vim'
-Plug 'tpope/timl'
+Plug 'sjl/tslime.vim'
 Plug 'kovisoft/paredit', { 'for': ['clojure', 'scheme'] }
+Plug 'tpope/vim-sensible'
+Plug 'scrooloose/nerdtree'
+Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'jlanzarotta/bufexplorer'
 
 call plug#end()
 
 let g:scheme_split_size = -10
 autocmd filetype lisp,scheme,art setlocal equalprg=scmindent.rkt
+
+" tslime
+
+let g:tslime_ensure_trailing_newlines = 1
+let g:tslime_normal_mapping = '<leader>t'
+let g:tslime_visual_mapping = '<leader>t'
+let g:tslime_vars_mapping = '<leader>T'
 
 let g:niji_dark_colours = [
     \ [ '81', '#5fd7ff'],
@@ -22,6 +32,33 @@ let g:niji_dark_colours = [
     \ [ '6',  '#2aa198'],
     \ [ '4',  '#268bd2'],
     \ ]
+" ============ WSL clipboard ============
+
+let s:clip = '/mnt/c/Windows/System32/clip.exe'
+if executable(s:clip)
+	augroup WSLYank
+		autocmd!
+		autocmd TextYankPost * call system('echo '.shellescape(join(v:event.regcontents,"\<CR>")).' | '.s:clip)
+	augroup END
+end
+
+map <silent> "=p :r !powershell.exe -Command Get-Clipboard<CR>
+
+" ============ NerdTree settings ============
+" show current file in the file tree
+nnoremap <silent> <Leader>u :NERDTreeFind<CR>
+" autoload by default
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+" close after opening a file
+let NERDTreeQuitOnOpen = 1
+" q closes Vim if NerdTree is the last remaining window
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+let g:NERDTreeMinimalUI = 1
+let g:NERDTreeDirArrows = 1
+let g:NERDTreeShowGitStatusEnable = 1
+let g:NERDTreeGitStatusUpdateOnWrite = 1
 
 " ============ misc settings ============
 
@@ -35,7 +72,9 @@ set scrolloff=5
 set encoding=utf8
 set noswapfile
 set visualbell " silence, bitch!
-
+set mouse=a " enable mouse
+set hidden " allow abandoning unsaved buffers
+set backspace=indent,eol,start " allow backspacing over everything
 " highlight tabs, trailing spaces etc.
 set listchars=tab:>-,trail:⋅,eol:∇
 
